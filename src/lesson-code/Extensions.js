@@ -5,17 +5,7 @@ export function showLoadingStatus() {
   return source => {
     return new Observable(subscriber => {
       newTaskStarted();
-      const innerSubscription = source.subscribe({
-        next: val => subscriber.next(val),
-        error: err => {
-          existingTaskCompleted();
-          subscriber.error(err);
-        },
-        complete: () => {
-          existingTaskCompleted();
-          subscriber.complete();
-        }
-      });
+      const innerSubscription = source.subscribe(subscriber);
       return () => {
         existingTaskCompleted();
         innerSubscription.unsubscribe();
